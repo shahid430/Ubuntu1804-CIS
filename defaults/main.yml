@@ -380,10 +380,9 @@ ubuntu1804cis_setup_tcp_wrappers: false
 
 # 3.3.4 | PATCH | Ensure /etc/hosts.allow is configured
 ubuntu1804cis_host_allow:
-  - "10.0.0.0/255.0.0.0"
-  - "172.16.0.0/255.240.0.0"
-  - "192.168.0.0/255.255.0.0"
-  - "0.0.0.0/0.0.0.0"
+ # - "10.0.0.0/255.0.0.0"
+ # - "172.16.0.0/255.240.0.0"
+ # - "0.0.0.0/0.0.0.0"
 
 ubuntu1804cis_firewall: firewalld
 # ubuntu1804cis_firewall: iptables
@@ -399,27 +398,46 @@ ubuntu1804cis_firewall_services:
 
 # Warning Banner Content (issue, issue.net, motd)
 ubuntu1804cis_warning_banner: |
-   Authorized uses only. All activity may be monitored and reported.
+  *========================================================================*\
+	|                       *** NOTICE TO USERS ***                          *
+	|                                                                        *
+	| Warning contents:                                                      *
+	| This is a system belonging to <OpCo Axiata Bhd>. All <OpCo> systems are* 
+	| provided for the processing of <OpCo>'s information and <OpCo> customer* 
+	| personal data. All content on this system is confidential in nature and*
+	| is protected as required by the Personal Data Protection Act 2010,other*
+	| Malaysian Laws and regulations as well as <OpCo>'s confidentiality pro-|
+	| visions and terms of use.The activities to this system may be monitored|
+	| recorded, or captured in order to comply with <OpCo> internal policies |
+	| and the relevant Malaysian Laws and Regulations. Any unauthorised use  |
+	| of the system or the information therein shall be subject to discipli- |
+	| nary action and may lead to criminal prosecution. Unauthorized or imp- |
+	| roper use of this system may result in administrative action, discipli-| 
+	| nary action and/or civil charges/criminal penalties, with jail terms of|
+	| up to 3 years and fines of up to RM 500,000 By continuing to use this  |
+	| system you indicate your awareness of and consent to these terms and   | 
+	| conditions of use.                                                     |
+	\------------------------------------------------------------------------/
 # End Banner
 
 ## Section 4 Vars
 ubuntu1804cis_auditd:
   admin_space_left_action: halt
   max_log_file_action: keep_logs
-  max_audit_log_file_size: 10
+  max_audit_log_file_size: 50
 
-ubuntu1804cis_logrotate: "daily"
+ubuntu1804cis_logrotate: "weekly"
 
 ## Section 5 Vars
 ubuntu1804cis_at_allow_users: []
 ubuntu1804cis_cron_allow_users: []
 
 ubuntu1804cis_sshd:
-  clientalivecountmax: 3
+  clientalivecountmax: 0
   clientaliveinterval: 300
   ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
   macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
-  kexalgorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+  # kexalgorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
   logingracetime: 60
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
@@ -440,7 +458,7 @@ ubuntu1804cis_pwquality:
     value: '-1'
 
 ubuntu1804cis_pass:
-  max_days: 365
+  max_days: 90
   min_days: 1
   warn_age: 7
   inactive: 30
@@ -457,7 +475,7 @@ ubuntu1804cis_vartmp:
   source: /tmp
   fstype: false
   opts: "defaults, nodev, nosuid, noexec, bind"
-  enabled: false
+  enabled: `
 
 # Apply upgrades (set to false if another patching system is in place)
 ubuntu1804cis_apply_upgrades: true
