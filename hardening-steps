@@ -1,0 +1,25 @@
+#Install Ansible
+sudo apt install -y ansible     
+
+#Create or append ansible requirements file
+sudo sh -c "echo '- src: https://github.com/shahid430/Ubuntu1804-CIS.git' >> /etc/ansible/requirements.yml"    Create or append ansible requirements file
+
+#Install the role for CIS Ubuntu script from Github
+cd /etc/ansible/
+sudo ansible-galaxy install -p roles -r /etc/ansible/requirements.yml
+
+#Create Ansible Playbook for CIS Ubuntu script
+
+sudo sh -c "cat > /etc/ansible/harden.yml <<EOF
+- name: Harden Server
+  hosts: localhost
+  connection: local
+  become: yes
+
+  roles:
+    - Ubuntu1804-CIS
+    
+EOF
+"
+
+ansible-playbook /etc/ansible/harden.yml
